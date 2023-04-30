@@ -2,6 +2,8 @@ import { useState,useEffect } from "react";
 
 import {copy ,linkIcon ,loader ,tick} from "../assets"
 
+import { useLazyGetSummaryQuery } from "../services/article"; //this is a hook
+
 const Demo = () => {
 
   const [article, setArticle] = useState({
