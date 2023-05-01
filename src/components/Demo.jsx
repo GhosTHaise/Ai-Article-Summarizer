@@ -13,6 +13,7 @@ const Demo = () => {
 
   const [allArticles, setAllArticles] = useState([]);
   const [getSummary,{error,isFetching}] = useLazyGetSummaryQuery();
+  const [copied, setCopied] = useState("");
 
   useEffect(()=>{
     const articlesFromLocalStorage = JSON.parse(
@@ -41,6 +42,14 @@ const Demo = () => {
       }
   }
 
+  const handleCopy = (copyUrl) => {
+    setCopied(copyUrl);
+    navigator.clipboard.writeText(copyUrl);
+
+    setTimeout(() => {
+        setCopied("");
+    }, 3000);
+  }
   return (
     <section className="mt-16 w-full max-w-xl">
         {/* Search */}
@@ -81,11 +90,15 @@ const Demo = () => {
                       onClick={()=>setArticle(item)}
                       className="link_card"
                     >
-                        <div className="copy_btn">
+                        <div 
+                          className="copy_btn"
+                          onClick={() => handleCopy(item.url)}
+                          >
                             <img 
-                            src={copy}
+                            src={item.url === copied ? tick : copy}
                             alt="copy_icon"
-                            className="w-[40%] h-[40$] object-contain" />
+                            className="w-[40%] h-[40$] object-contain" 
+                            />
                         </div>
                         <p className="flex-1 font-satoshi text-blue-700 font-medium text-sm truncate">
                             {item.url}
@@ -107,7 +120,7 @@ const Demo = () => {
                 ) : error ?
                 (
                   <p className="font-inter font-bold text-black text-center">
-                    Weel, that wasn't supposed to happen...
+                    {"Weel, that wasn't supposed to happen..."}
                     <br />
                     <span className="font-satoshi font-normal text-gray-700">
                       {error?.data?.error}
